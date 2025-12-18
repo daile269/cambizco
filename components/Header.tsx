@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,14 +12,14 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
       setIsMobileMenuOpen(false);
     }
   };
@@ -32,7 +32,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-24 h-24 rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="w-20 h-20 rounded-lg overflow-hidden flex items-center justify-center">
               <Image
                 src="/logo.png"
                 alt="CamBiz Logo"
@@ -46,37 +46,43 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <button
-              onClick={() => scrollToSection('services')}
+              onClick={() => scrollToSection("services")}
               className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
             >
               Dịch Vụ
             </button>
             <button
-              onClick={() => scrollToSection('process')}
+              onClick={() => scrollToSection("process")}
               className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
             >
               Quy trình
             </button>
             <button
-              onClick={() => scrollToSection('feedback')}
+              onClick={() => scrollToSection("feedback")}
               className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
             >
               Feedback
             </button>
             <button
-              onClick={() => scrollToSection('about')}
+              onClick={() => scrollToSection("about")}
               className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
             >
               Giới thiệu
             </button>
             <button
-              onClick={() => scrollToSection('team')}
+              onClick={() => scrollToSection("team")}
               className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
             >
               Đội ngũ
             </button>
             <button
-              onClick={() => scrollToSection('contact')}
+              onClick={() => scrollToSection("blog")}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+            >
+              Bài viết
+            </button>
+            <button
+              onClick={() => scrollToSection("contact")}
               className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
               Liên hệ tư vấn
@@ -86,7 +92,9 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+            className={`md:hidden p-2 ${
+              isScrolled ? "text-gray-900" : "text-white"
+            }`}
           >
             <svg
               className="w-6 h-6"
@@ -117,37 +125,43 @@ export default function Header() {
         {isMobileMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 space-y-4 animate-slide-up">
             <button
-              onClick={() => scrollToSection('services')}
+              onClick={() => scrollToSection("services")}
               className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
             >
               Dịch Vụ
             </button>
             <button
-              onClick={() => scrollToSection('process')}
+              onClick={() => scrollToSection("process")}
               className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
             >
               Quy trình
             </button>
             <button
-              onClick={() => scrollToSection('feedback')}
+              onClick={() => scrollToSection("feedback")}
               className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
             >
               Feedback
             </button>
             <button
-              onClick={() => scrollToSection('about')}
+              onClick={() => scrollToSection("about")}
               className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
             >
               Giới thiệu
             </button>
             <button
-              onClick={() => scrollToSection('team')}
+              onClick={() => scrollToSection("team")}
               className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
             >
               Đội ngũ
             </button>
             <button
-              onClick={() => scrollToSection('contact')}
+              onClick={() => scrollToSection("blog")}
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+            >
+              Bài viết
+            </button>
+            <button
+              onClick={() => scrollToSection("contact")}
               className="block w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Liên hệ tư vấn

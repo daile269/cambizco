@@ -4,6 +4,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -1149,6 +1156,194 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Featured Posts Section */}
+      <section id="blog" className="py-20 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
+              BÀI VIẾT NỔI BẬT
+            </h2>
+            <p className="text-gray-600">
+              Cập nhật tin tức và thông tin mới nhất từ CamBiz
+            </p>
+          </div>
+
+          {/* Posts Slider */}
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+              },
+            }}
+            className="featured-posts-swiper"
+          >
+            {/* Post 1 - Tuyển dụng */}
+            <SwiperSlide>
+              <a
+                href="/blog/tuyen-dung-nhan-su"
+                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
+              >
+                <div className="relative h-64 overflow-hidden">
+                  <Image
+                    src="/recruitment.jpg"
+                    alt="Tuyển dụng nhân sự"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                    Tuyển dụng
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    📢 TUYỂN DỤNG NHÂN SỰ (YÊU CẦU BIẾT TV – CAM)
+                  </h3>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    Chúng tôi cần tuyển các vị trí: Nhân viên Sale, Nhân viên
+                    Kho, Trợ lý. Yêu cầu giao tiếp được Tiếng Việt & Tiếng
+                    Campuchia...
+                  </p>
+                  <div className="flex items-center text-blue-600 font-semibold">
+                    Xem chi tiết
+                    <svg
+                      className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </SwiperSlide>
+
+            {/* Post 2 - Dịch vụ */}
+            <SwiperSlide>
+              <a
+                href="/blog/dich-vu-fulfillment"
+                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
+              >
+                <div className="relative h-64 overflow-hidden">
+                  <Image
+                    src="/cb.jpg"
+                    alt="Dịch vụ Fulfillment"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                    Dịch vụ
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    Dịch Vụ Fulfillment Toàn Diện Tại Campuchia
+                  </h3>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    CamBiz cung cấp giải pháp fulfillment từ A-Z, giúp bạn dễ
+                    dàng kinh doanh từ Việt Nam sang Campuchia...
+                  </p>
+                  <div className="flex items-center text-blue-600 font-semibold">
+                    Xem chi tiết
+                    <svg
+                      className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </SwiperSlide>
+
+            {/* Post 3 - Sự kiện */}
+            <SwiperSlide>
+              <a
+                href="/blog/su-kien-cong-ty"
+                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
+              >
+                <div className="relative h-64 overflow-hidden">
+                  <Image
+                    src="/e11.jpg"
+                    alt="Sự kiện công ty"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 bg-green-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                    Sự kiện
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    Sự Kiện Gặp Mặt Đối Tác Cuối Năm
+                  </h3>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    CamBiz tổ chức sự kiện gặp mặt đối tác, tri ân khách hàng đã
+                    đồng hành cùng chúng tôi trong suốt thời gian qua...
+                  </p>
+                  <div className="flex items-center text-blue-600 font-semibold">
+                    Xem chi tiết
+                    <svg
+                      className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            </SwiperSlide>
+          </Swiper>
+
+          {/* View All Button */}
+          <div className="text-center mt-12">
+            <a
+              href="/blog"
+              className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              Xem tất cả bài viết
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section id="feedback" className="py-20 px-4 bg-gray-100">
         <div className="max-w-7xl mx-auto">
@@ -1519,6 +1714,47 @@ export default function Home() {
       </section>
 
       <Footer />
+
+      <style jsx global>{`
+        .featured-posts-swiper {
+          padding-bottom: 50px !important;
+        }
+
+        .featured-posts-swiper .swiper-button-next,
+        .featured-posts-swiper .swiper-button-prev {
+          color: #2563eb;
+          background: white;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .featured-posts-swiper .swiper-button-next:after,
+        .featured-posts-swiper .swiper-button-prev:after {
+          font-size: 20px;
+          font-weight: bold;
+        }
+
+        .featured-posts-swiper .swiper-button-next:hover,
+        .featured-posts-swiper .swiper-button-prev:hover {
+          background: #2563eb;
+          color: white;
+        }
+
+        .featured-posts-swiper .swiper-pagination-bullet {
+          width: 12px;
+          height: 12px;
+          background: #cbd5e1;
+          opacity: 1;
+        }
+
+        .featured-posts-swiper .swiper-pagination-bullet-active {
+          background: #2563eb;
+          width: 30px;
+          border-radius: 6px;
+        }
+      `}</style>
     </main>
   );
 }
