@@ -12,7 +12,7 @@ export default function ScrollAnimations() {
       (section as HTMLElement).style.opacity = "0";
       (section as HTMLElement).style.transform = "translateY(50px)";
       (section as HTMLElement).style.transition =
-        "opacity 0.8s ease-out, transform 0.8s ease-out";
+        "opacity 0.6s ease-out, transform 0.6s ease-out";
     });
 
     // Create intersection observer
@@ -47,9 +47,9 @@ export default function ScrollAnimations() {
       const element = card as HTMLElement;
       element.style.opacity = "0";
       element.style.transform = "translateY(30px)";
-      element.style.transition = `opacity 0.6s ease-out ${
+      element.style.transition = `opacity 0.4s ease-out ${
         index * 0.1
-      }s, transform 0.6s ease-out ${index * 0.1}s`;
+      }s, transform 0.4s ease-out ${index * 0.1}s`;
 
       const cardObserver = new IntersectionObserver(
         (entries) => {

@@ -50,7 +50,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4 mb-6 ml-6 mr-6">
+          <div className="space-y-4 mb-6 md:ml-6 md:mr-6">
             <h3 className="text-xl font-bold mb-6">CAMBIZ FULFILLMENT</h3>
             <nav className="space-y-3">
               <button
