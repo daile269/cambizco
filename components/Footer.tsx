@@ -10,11 +10,11 @@ export default function Footer() {
 
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-      <div className="container-custom py-16 ml-16 mr-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 ml-16 mr-16">
+      <div className="container-custom py-8 ml-8 mr-8">
+        <div className="grid grid-cols-1 md:grid-cols-3">
           {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
+          <div className="space-y-4 mb-6">
+            <div className="flex items-center">
               <span className="text-2xl font-bold">CamBiz</span>
             </div>
             <p className="text-gray-300 leading-relaxed">
@@ -50,36 +50,36 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold mb-6">Liên kết nhanh</h3>
+          <div className="space-y-4 mb-6 ml-6 mr-6">
+            <h3 className="text-xl font-bold mb-6">CAMBIZ FULFILLMENT</h3>
             <nav className="space-y-3">
               <button
                 onClick={() => scrollToSection("services")}
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Dịch vụ
               </button>
               <button
                 onClick={() => scrollToSection("process")}
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Quy trình
               </button>
               <button
                 onClick={() => scrollToSection("feedback")}
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Feedback
               </button>
               <button
                 onClick={() => scrollToSection("about")}
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Giới thiệu
               </button>
               <button
                 onClick={() => scrollToSection("team")}
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Đội ngũ
               </button>
@@ -87,33 +87,33 @@ export default function Footer() {
           </div>
 
           {/* Customer Service */}
-          <div className="space-y-4">
+          <div className="space-y-4 mb-6">
             <h3 className="text-xl font-bold mb-6">Dịch vụ khách hàng</h3>
             <nav className="space-y-3">
-              <Link
-                href="#"
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+              <button
+                onClick={() => scrollToSection("services")}
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Chính sách giao hàng
-              </Link>
-              <Link
-                href="#"
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+              </button>
+              <button
+                onClick={() => scrollToSection("services")}
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Điều khoản sử dụng
-              </Link>
-              <Link
-                href="#"
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+              </button>
+              <button
+                onClick={() => scrollToSection("about")}
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Chính sách bảo mật
-              </Link>
-              <Link
-                href="#"
-                className="block text-gray-300 hover:text-blue-400 transition-colors"
+              </button>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="block w-full text-left py-2 text-gray-300 hover:text-blue-400 border-b border-gray-600 hover:border-blue-400 transition-all"
               >
                 Liên hệ chúng tôi
-              </Link>
+              </button>
             </nav>
           </div>
         </div>

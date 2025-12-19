@@ -34,52 +34,58 @@ export default function Header() {
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-20 h-20 rounded-lg overflow-hidden flex items-center justify-center">
               <Image
-                src="/logo.png"
+                src="/cbz.png"
                 alt="CamBiz Logo"
-                width={128}
-                height={128}
+                width={130}
+                height={130}
                 className="object-contain"
               />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
             <button
               onClick={() => scrollToSection("services")}
-              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
             >
               Dịch Vụ
             </button>
             <button
               onClick={() => scrollToSection("process")}
-              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
             >
               Quy trình
             </button>
             <button
               onClick={() => scrollToSection("feedback")}
-              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
             >
               Feedback
             </button>
             <button
               onClick={() => scrollToSection("about")}
-              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
             >
               Giới thiệu
             </button>
             <button
               onClick={() => scrollToSection("team")}
-              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
             >
               Đội ngũ
             </button>
             <button
               onClick={() => scrollToSection("blog")}
-              className={`font-medium hover:text-blue-600 transition-colors text-gray-700`}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
             >
               Bài viết
+            </button>
+            <button
+              onClick={() => scrollToSection("recruitment")}
+              className={`font-medium hover:text-blue-600 transition-colors text-gray-700 cursor-pointer`}
+            >
+              Tuyển dụng
             </button>
             <button
               onClick={() => scrollToSection("contact")}
@@ -89,11 +95,11 @@ export default function Header() {
             </button>
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Right */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className={`md:hidden p-2 ${
-              isScrolled ? "text-gray-900" : "text-white"
+              isScrolled ? "text-gray-900" : "text-gray-900"
             }`}
           >
             <svg
@@ -126,39 +132,45 @@ export default function Header() {
           <nav className="md:hidden mt-4 pb-4 space-y-4 animate-slide-up">
             <button
               onClick={() => scrollToSection("services")}
-              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               Dịch Vụ
             </button>
             <button
               onClick={() => scrollToSection("process")}
-              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               Quy trình
             </button>
             <button
               onClick={() => scrollToSection("feedback")}
-              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               Feedback
             </button>
             <button
               onClick={() => scrollToSection("about")}
-              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               Giới thiệu
             </button>
             <button
               onClick={() => scrollToSection("team")}
-              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               Đội ngũ
             </button>
             <button
               onClick={() => scrollToSection("blog")}
-              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors"
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               Bài viết
+            </button>
+            <button
+              onClick={() => scrollToSection("recruitment")}
+              className="block w-full text-left py-2 px-4 bg-white rounded-lg font-medium text-gray-700 hover:bg-blue-50 transition-colors cursor-pointer"
+            >
+              Tuyển dụng
             </button>
             <button
               onClick={() => scrollToSection("contact")}

@@ -4,15 +4,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { useState } from "react";
 
 export default function BlogPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5;
+
   const blogPosts = [
     {
       slug: "tuyen-dung-nhan-su",
@@ -46,13 +43,39 @@ export default function BlogPage() {
     },
   ];
 
+  // Calculate pagination
+  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <main className="min-h-screen bg-gray-50">
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 mt-20 py-10 px-4">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="relative mt-20 py-20 px-4 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/cb.jpg"
+            alt="CamBiz Blog"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-700/80"></div>
+
+        {/* Content */}
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Blog CamBiz
           </h1>
@@ -62,68 +85,67 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Blog Posts Slider */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            breakpoints={{
-              640: {
-                slidesPerView: 1,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 30,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 30,
-              },
-            }}
-            className="blog-swiper"
-          >
-            {blogPosts.map((post) => (
-              <SwiperSlide key={post.slug}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
-                >
-                  <div className="relative h-64 overflow-hidden">
+      {/* Blog Posts List */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">
+            Bài Viết Mới Nhất
+          </h2>
+
+          <div className="space-y-8">
+            {currentPosts.map((post, index) => (
+              <Link
+                key={`${post.slug}-${index}`}
+                href={`/blog/${post.slug}`}
+                className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 block"
+              >
+                <div className="flex flex-col md:flex-row">
+                  {/* Image */}
+                  <div className="relative w-full md:w-80 h-64 md:h-56 flex-shrink-0 overflow-hidden">
                     <Image
                       src={post.image}
                       alt={post.title}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div
-                      className={`absolute top-4 left-4 ${post.categoryColor} text-white px-4 py-1 rounded-full text-sm font-semibold`}
+                      className={`absolute top-4 left-4 ${post.categoryColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}
                     >
                       {post.category}
                     </div>
                   </div>
-                  <div className="p-6">
-                    <div className="text-sm text-gray-500 mb-2">
-                      {post.date}
+
+                  {/* Content */}
+                  <div className="flex-1 p-6 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-sm text-gray-500">
+                          {post.date}
+                        </span>
+                        <span className="text-gray-300">•</span>
+                        <span
+                          className={`text-xs font-semibold ${post.categoryColor.replace(
+                            "bg-",
+                            "text-"
+                          )}`}
+                        >
+                          {post.category}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+
+                      <p className="text-gray-600 mb-4 line-clamp-2 md:line-clamp-3">
+                        {post.excerpt}
+                      </p>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center text-blue-600 font-semibold">
-                      Xem chi tiết
+
+                    <div className="flex items-center text-blue-600 font-semibold text-sm">
+                      Đọc thêm
                       <svg
-                        className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
+                        className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -137,55 +159,59 @@ export default function BlogPage() {
                       </svg>
                     </div>
                   </div>
-                </Link>
-              </SwiperSlide>
+                </div>
+              </Link>
             ))}
-          </Swiper>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-12">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-blue-600 hover:text-white shadow-md"
+                }`}
+              >
+                ← Trước
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (number) => (
+                  <button
+                    key={number}
+                    onClick={() => paginate(number)}
+                    className={`w-10 h-10 rounded-lg font-medium transition-all ${
+                      currentPage === number
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-white text-gray-700 hover:bg-blue-100 shadow-md"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-blue-600 hover:text-white shadow-md"
+                }`}
+              >
+                Sau →
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       <Footer />
-
-      <style jsx global>{`
-        .blog-swiper {
-          padding-bottom: 50px !important;
-        }
-
-        .blog-swiper .swiper-button-next,
-        .blog-swiper .swiper-button-prev {
-          color: #2563eb;
-          background: white;
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        }
-
-        .blog-swiper .swiper-button-next:after,
-        .blog-swiper .swiper-button-prev:after {
-          font-size: 20px;
-          font-weight: bold;
-        }
-
-        .blog-swiper .swiper-button-next:hover,
-        .blog-swiper .swiper-button-prev:hover {
-          background: #2563eb;
-          color: white;
-        }
-
-        .blog-swiper .swiper-pagination-bullet {
-          width: 12px;
-          height: 12px;
-          background: #cbd5e1;
-          opacity: 1;
-        }
-
-        .blog-swiper .swiper-pagination-bullet-active {
-          background: #2563eb;
-          width: 30px;
-          border-radius: 6px;
-        }
-      `}</style>
     </main>
   );
 }

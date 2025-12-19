@@ -2,6 +2,8 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollAnimations from "@/components/ScrollAnimations";
+import FloatingContact from "@/components/FloatingContact";
 import Image from "next/image";
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,11 +21,17 @@ export default function Home() {
     email: "",
     message: "",
   });
+  const [showThankYou, setShowThankYou] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Cảm ơn bạn đã đăng ký! Chúng tôi sẽ liên hệ với bạn sớm nhất.");
+    setShowThankYou(true);
     setFormData({ name: "", phone: "", email: "", message: "" });
+
+    // Auto hide thank you page after 5 seconds
+    setTimeout(() => {
+      setShowThankYou(false);
+    }, 5000);
   };
 
   const services = [
@@ -76,21 +84,77 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <Header />
+      <ScrollAnimations />
+      <FloatingContact />
+
+      {/* Thank You Modal */}
+      {showThankYou && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-md mx-4 animate-scale-in">
+            <div className="text-center">
+              {/* Success Icon */}
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg
+                  className="w-10 h-10 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+
+              {/* Thank You Message */}
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Cảm ơn bạn!
+              </h2>
+              <p className="text-gray-600 mb-2">
+                Chúng tôi đã nhận được thông tin đăng ký của bạn.
+              </p>
+              <p className="text-gray-600 mb-8">
+                Đội ngũ CamBiz sẽ liên hệ với bạn trong thời gian sớm nhất.
+              </p>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setShowThankYou(false)}
+                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300"
+              >
+                Đóng
+              </button>
+
+              {/* Auto close message */}
+              <p className="text-sm text-gray-400 mt-4">
+                Tự động đóng sau 5 giây
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[40vh] md:min-h-[80vh] lg:min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
             src="/cb.jpg"
             alt="CamBiz Fulfillment"
             fill
-            className="object-cover"
+            className="object-cover object-center"
             priority
+            sizes="100vw"
           />
         </div>
 
-        <div className="absolute inset-0 opacity-20">
+        {/* Overlay gradient for better text readability on mobile */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 md:hidden"></div>
+
+        <div className="absolute inset-0 opacity-20 hidden md:block">
           <div className="absolute top-20 left-20 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
           <div
             className="absolute top-40 right-20 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl animate-float"
@@ -102,9 +166,9 @@ export default function Home() {
           ></div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
           <svg
-            className="w-6 h-6 text-white"
+            className="w-5 h-5 md:w-6 md:h-6 text-white drop-shadow-lg"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -155,7 +219,7 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-2">Sứ mệnh</h3>
+                    <h3 className="font-bold text-gray-900">Sứ mệnh</h3>
                   </div>
                 </div>
 
@@ -237,23 +301,27 @@ export default function Home() {
 
             {/* Right Column - Images */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-amber-100 to-amber-200 rounded-3xl p-8 relative overflow-hidden min-h-[500px]">
-                <div className="absolute top-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md">
-                  <p className="text-sm font-bold text-gray-900">CAMBIZ</p>
-                  <p className="text-xs text-gray-600">
+              <div className="bg-gradient-to-br from-amber-100 to-amber-200 rounded-3xl p-4 md:p-6 lg:p-8 relative overflow-hidden min-h-[350px] md:min-h-[450px] lg:min-h-[500px]">
+                <div className="absolute top-4 left-4 bg-white px-3 md:px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-xs md:text-sm font-bold text-gray-900">
+                    CAMBIZ
+                  </p>
+                  <p className="text-[10px] md:text-xs text-gray-600">
                     Đơn vị hậu cần Fulfillment số 1
                   </p>
-                  <p className="text-xs text-gray-600">Việt - Campuchia</p>
-                  <div className="mt-2 space-y-1 text-xs text-gray-700">
+                  <p className="text-[10px] md:text-xs text-gray-600">
+                    Việt - Campuchia
+                  </p>
+                  <div className="mt-2 space-y-1 text-[10px] md:text-xs text-gray-700">
                     <p>📞 (+855) 0979 80 7979</p>
                     <p>📞 (+84) 0931 431 593 (Zalo)</p>
                   </div>
                 </div>
 
                 {/* Image Grid */}
-                <div className="grid grid-cols-2 gap-4 mt-32">
+                <div className="grid grid-cols-2 gap-3 md:gap-4 mt-20 md:mt-32">
                   <div className="col-span-2">
-                    <div className="relative h-48 rounded-2xl overflow-hidden shadow-lg">
+                    <div className="relative h-24 md:h-32 lg:h-48 rounded-2xl overflow-hidden shadow-lg">
                       <Image
                         src="/t2.jpg"
                         alt="Team working"
@@ -262,7 +330,7 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  <div className="relative h-32 rounded-full overflow-hidden shadow-lg border-4 border-white">
+                  <div className="relative h-20 md:h-24 lg:h-32 rounded-full overflow-hidden shadow-lg border-2 md:border-4 border-white">
                     <Image
                       src="/warehouse.png"
                       alt="Office"
@@ -270,7 +338,7 @@ export default function Home() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="relative h-32 rounded-full overflow-hidden shadow-lg border-4 border-white">
+                  <div className="relative h-20 md:h-24 lg:h-32 rounded-full overflow-hidden shadow-lg border-2 md:border-4 border-white">
                     <Image
                       src="/k1.jpg"
                       alt="Products"
@@ -278,7 +346,7 @@ export default function Home() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="col-span-2 relative h-32 rounded-full overflow-hidden shadow-lg border-4 border-white">
+                  <div className="col-span-2 relative h-20 md:h-24 lg:h-32 rounded-full overflow-hidden shadow-lg border-2 md:border-4 border-white">
                     <Image
                       src="/don.jpg"
                       alt="Warehouse"
@@ -1546,7 +1614,7 @@ export default function Home() {
       </section>
 
       {/* Contact Form Section */}
-      <section id="contact" className="py-20 px-4 bg-white">
+      <section id="contact" className="py-8 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12 animate-fade-in-up">
