@@ -4,44 +4,40 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { database } from "@/lib/firebase";
+import { ref, onValue, query, orderByChild } from "firebase/database";
+import { BlogPost } from "@/types/blog";
 
 export default function BlogPage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const postsPerPage = 5;
 
-  const blogPosts = [
-    {
-      slug: "tuyen-dung-nhan-su",
-      title: "📢 TUYỂN DỤNG NHÂN SỰ (YÊU CẦU BIẾT TV – CAM)",
-      excerpt:
-        "Chúng tôi cần tuyển các vị trí: Nhân viên Sale, Nhân viên Kho, Trợ lý. Yêu cầu giao tiếp được Tiếng Việt & Tiếng Campuchia",
-      image: "/recruitment.jpg",
-      category: "Tuyển dụng",
-      categoryColor: "bg-orange-500",
-      date: "15/12/2025",
-    },
-    {
-      slug: "dich-vu-fulfillment",
-      title: "Dịch Vụ Fulfillment Toàn Diện Tại Campuchia",
-      excerpt:
-        "CamBiz cung cấp giải pháp fulfillment từ A-Z, giúp bạn dễ dàng kinh doanh từ Việt Nam sang Campuchia",
-      image: "/cb.jpg",
-      category: "Dịch vụ",
-      categoryColor: "bg-blue-600",
-      date: "10/12/2025",
-    },
-    {
-      slug: "su-kien-cong-ty",
-      title: "Sự Kiện Gặp Mặt Đối Tác Cuối Năm",
-      excerpt:
-        "CamBiz tổ chức sự kiện gặp mặt đối tác, tri ân khách hàng đã đồng hành cùng chúng tôi trong suốt thời gian qua",
-      image: "/e12.jpg",
-      category: "Sự kiện",
-      categoryColor: "bg-green-600",
-      date: "05/12/2025",
-    },
-  ];
+  // Fetch posts from Firebase Realtime Database
+  useEffect(() => {
+    const postsRef = ref(database, "blogPosts");
+    const postsQuery = query(postsRef, orderByChild("createdAt"));
+
+    const unsubscribe = onValue(postsQuery, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const postsArray = Object.keys(data)
+          .map((key) => ({
+            id: key,
+            ...data[key],
+          }))
+          .reverse() as BlogPost[]; // Reverse to show newest first
+        setBlogPosts(postsArray);
+      } else {
+        setBlogPosts([]);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Calculate pagination
   const totalPages = Math.ceil(blogPosts.length / postsPerPage);
@@ -53,6 +49,24 @@ export default function BlogPage() {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Category color mapping
+  const getCategoryColor = (category: string) => {
+    const colors: { [key: string]: string } = {
+      "Tuyển dụng": "bg-orange-500",
+      "Dịch vụ": "bg-blue-600",
+      "Sự kiện": "bg-green-600",
+    };
+    return colors[category] || "bg-gray-600";
+  };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -93,75 +107,86 @@ export default function BlogPage() {
           </h2>
 
           <div className="space-y-8">
-            {currentPosts.map((post, index) => (
-              <Link
-                key={`${post.slug}-${index}`}
-                href={`/blog/${post.slug}`}
-                className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 block"
-              >
-                <div className="flex flex-col md:flex-row">
-                  {/* Image */}
-                  <div className="relative w-full md:w-80 h-64 md:h-56 flex-shrink-0 overflow-hidden">
-                    <Image
-                      src={post.image}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div
-                      className={`absolute top-4 left-4 ${post.categoryColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}
-                    >
-                      {post.category}
-                    </div>
-                  </div>
+            {currentPosts.map((post, index) => {
+              const categoryColor = getCategoryColor(post.category);
+              const excerpt =
+                post.excerpt || post.description1.substring(0, 150) + "...";
+              const displayDate =
+                post.date ||
+                (post.createdAt
+                  ? new Date(post.createdAt).toLocaleDateString("vi-VN")
+                  : "");
 
-                  {/* Content */}
-                  <div className="flex-1 p-6 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-sm text-gray-500">
-                          {post.date}
-                        </span>
-                        <span className="text-gray-300">•</span>
-                        <span
-                          className={`text-xs font-semibold ${post.categoryColor.replace(
-                            "bg-",
-                            "text-"
-                          )}`}
-                        >
-                          {post.category}
-                        </span>
+              return (
+                <Link
+                  key={`${post.slug}-${index}`}
+                  href={`/blog/${post.slug}`}
+                  className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 block"
+                >
+                  <div className="flex flex-col md:flex-row">
+                    {/* Image */}
+                    <div className="relative w-full md:w-80 h-64 md:h-56 flex-shrink-0 overflow-hidden">
+                      <Image
+                        src={post.image1 || "/placeholder.jpg"}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div
+                        className={`absolute top-4 left-4 ${categoryColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}
+                      >
+                        {post.category}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 p-6 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-sm text-gray-500">
+                            {displayDate}
+                          </span>
+                          <span className="text-gray-300">•</span>
+                          <span
+                            className={`text-xs font-semibold ${categoryColor.replace(
+                              "bg-",
+                              "text-"
+                            )}`}
+                          >
+                            {post.category}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                          {post.title}
+                        </h3>
+
+                        <p className="text-gray-600 mb-4 line-clamp-2 md:line-clamp-3">
+                          {excerpt}
+                        </p>
                       </div>
 
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-
-                      <p className="text-gray-600 mb-4 line-clamp-2 md:line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center text-blue-600 font-semibold text-sm">
-                      Đọc thêm
-                      <svg
-                        className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
+                      <div className="flex items-center text-blue-600 font-semibold text-sm">
+                        Đọc thêm
+                        <svg
+                          className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Pagination */}
