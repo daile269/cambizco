@@ -58,8 +58,8 @@ export default function Home() {
     },
     {
       image: "https://via.placeholder.com/100/2563eb/ffffff?text=Money",
-      title: "Chuyển tiền Cam- Việt",
-      description: "Dịch vụ chuyển tiền an toàn, phí thấp",
+      title: "Thanh toán hộ và Thu hộ $",
+      description: "Thanh toán hộ thu hộ an toàn, nhanh chóng, uy tín",
     },
     {
       image: "https://via.placeholder.com/100/2563eb/ffffff?text=Fulfillment",
@@ -260,7 +260,7 @@ export default function Home() {
 
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Gia trị cốt lõi
+                  Giá trị cốt lõi
                 </h3>
                 <div className="space-y-4 text-sm text-gray-700">
                   <div>
