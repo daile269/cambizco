@@ -5,9 +5,12 @@ import Footer from "@/components/Footer";
 import ScrollAnimations from "@/components/ScrollAnimations";
 import FloatingContact from "@/components/FloatingContact";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { database } from "@/lib/firebase";
+import { ref, onValue } from "firebase/database";
+import { BlogPost } from "@/types/blog";
 
 // Import Swiper styles
 import "swiper/css";
@@ -22,6 +25,29 @@ export default function Home() {
     message: "",
   });
   const [showThankYou, setShowThankYou] = useState(false);
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
+
+  // Fetch featured blog posts
+  useEffect(() => {
+    const postsRef = ref(database, "blogPosts");
+
+    const unsubscribe = onValue(postsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const posts: BlogPost[] = Object.keys(data)
+          .map((key) => ({
+            id: key,
+            ...data[key],
+          }))
+          .filter((post) => post.featured === true) // Chỉ lấy bài viết nổi bật
+          .sort((a, b) => b.createdAt - a.createdAt) // Sort by newest first
+          .slice(0, 3); // Lấy tối đa 3 bài
+        setFeaturedPosts(posts);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +58,23 @@ export default function Home() {
     setTimeout(() => {
       setShowThankYou(false);
     }, 5000);
+  };
+
+  // Get category color
+  const getCategoryColor = (category: string) => {
+    const colors: { [key: string]: string } = {
+      "Tuyển dụng": "bg-orange-500",
+      "Dịch vụ": "bg-blue-600",
+      "Sự kiện": "bg-green-600",
+    };
+    return colors[category] || "bg-gray-600";
+  };
+
+  // Format date
+  const formatDate = (timestamp: any) => {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return date.toLocaleDateString("vi-VN");
   };
 
   const services = [
@@ -1237,168 +1280,93 @@ export default function Home() {
           </div>
 
           {/* Posts Slider */}
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            breakpoints={{
-              640: {
-                slidesPerView: 1,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 30,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 30,
-              },
-            }}
-            className="featured-posts-swiper"
-          >
-            {/* Post 1 - Tuyển dụng */}
-            <SwiperSlide>
-              <a
-                href="/blog/tuyen-dung-nhan-su"
-                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src="/recruitment.jpg"
-                    alt="Tuyển dụng nhân sự"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Tuyển dụng
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    📢 TUYỂN DỤNG NHÂN SỰ (YÊU CẦU BIẾT TV – CAM)
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    Chúng tôi cần tuyển các vị trí: Nhân viên Sale, Nhân viên
-                    Kho, Trợ lý. Yêu cầu giao tiếp được Tiếng Việt & Tiếng
-                    Campuchia...
-                  </p>
-                  <div className="flex items-center text-blue-600 font-semibold">
-                    Xem chi tiết
-                    <svg
-                      className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
+          {featuredPosts.length > 0 ? (
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={30}
+              slidesPerView={1}
+              navigation
+              pagination={{ clickable: true }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                640: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 30,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 30,
+                },
+              }}
+              className="featured-posts-swiper"
+            >
+              {featuredPosts.map((post) => (
+                <SwiperSlide key={post.id}>
+                  <a
+                    href={`/blog/${post.slug}`}
+                    className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      <Image
+                        src={post.image1 || "/placeholder.jpg"}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
                       />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </SwiperSlide>
-
-            {/* Post 2 - Dịch vụ */}
-            <SwiperSlide>
-              <a
-                href="/blog/dich-vu-fulfillment"
-                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src="/cb.jpg"
-                    alt="Dịch vụ Fulfillment"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Dịch vụ
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Dịch Vụ Fulfillment Toàn Diện Tại Campuchia
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    CamBiz cung cấp giải pháp fulfillment từ A-Z, giúp bạn dễ
-                    dàng kinh doanh từ Việt Nam sang Campuchia...
-                  </p>
-                  <div className="flex items-center text-blue-600 font-semibold">
-                    Xem chi tiết
-                    <svg
-                      className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </SwiperSlide>
-
-            {/* Post 3 - Sự kiện */}
-            <SwiperSlide>
-              <a
-                href="/blog/su-kien-cong-ty"
-                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block h-full"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src="/e11.jpg"
-                    alt="Sự kiện công ty"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 bg-green-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Sự kiện
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                    Sự Kiện Gặp Mặt Đối Tác Cuối Năm
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    CamBiz tổ chức sự kiện gặp mặt đối tác, tri ân khách hàng đã
-                    đồng hành cùng chúng tôi trong suốt thời gian qua...
-                  </p>
-                  <div className="flex items-center text-blue-600 font-semibold">
-                    Xem chi tiết
-                    <svg
-                      className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </SwiperSlide>
-          </Swiper>
+                      <div
+                        className={`absolute top-4 left-4 ${getCategoryColor(
+                          post.category
+                        )} text-white px-4 py-1 rounded-full text-sm font-semibold`}
+                      >
+                        {post.category}
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 line-clamp-3">
+                        {post.description1}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">
+                          {formatDate(post.createdAt)}
+                        </span>
+                        <div className="flex items-center text-blue-600 font-semibold">
+                          Xem chi tiết
+                          <svg
+                            className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="text-gray-600 mt-4">Đang tải bài viết...</p>
+            </div>
+          )}
 
           {/* View All Button */}
           <div className="text-center mt-12">

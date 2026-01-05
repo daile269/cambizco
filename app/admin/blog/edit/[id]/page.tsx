@@ -24,6 +24,7 @@ export default function EditBlogPostPage() {
     image3: "",
     image4: "",
   });
+  const [featured, setFeatured] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -47,6 +48,7 @@ export default function EditBlogPostPage() {
           image3: data.image3 || "",
           image4: data.image4 || "",
         });
+        setFeatured(data.featured || false);
         setIsLoading(false);
       } else {
         alert("Không tìm thấy bài viết!");
@@ -77,6 +79,7 @@ export default function EditBlogPostPage() {
       const postData = {
         ...formData,
         slug: createSlug(formData.title),
+        featured: featured,
         updatedAt: serverTimestamp(),
       };
 
@@ -232,6 +235,27 @@ export default function EditBlogPostPage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Nhập mô tả thứ tư (tùy chọn)"
               />
+            </div>
+
+            {/* Featured Checkbox */}
+            <div className="border-t pt-6">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={featured}
+                  onChange={(e) => setFeatured(e.target.checked)}
+                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-700">
+                    Đánh dấu là bài viết nổi bật
+                  </span>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Bài viết nổi bật sẽ hiển thị trên trang chủ (tối đa 3 bài
+                    mới nhất)
+                  </p>
+                </div>
+              </label>
             </div>
 
             {/* Images Upload */}

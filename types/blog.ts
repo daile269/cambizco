@@ -13,6 +13,7 @@ export interface BlogPost {
   createdAt: number;
   updatedAt: number;
   slug: string;
+  featured?: boolean; // Đánh dấu bài viết nổi bật
   // Optional fields for display
   excerpt?: string;
   date?: string;

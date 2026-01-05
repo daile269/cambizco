@@ -119,14 +119,14 @@ export default function BlogPostPage() {
                 {formatDate(post.createdAt)}
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               {post.title}
             </h1>
           </div>
 
           {/* Featured Image */}
           {post.image1 && (
-            <div className="relative h-96 rounded-xl overflow-hidden mb-8 shadow-lg">
+            <div className="relative h-120 rounded-xl overflow-hidden mb-8 shadow-lg">
               <Image
                 src={post.image1}
                 alt={post.title}
@@ -142,14 +142,14 @@ export default function BlogPostPage() {
             <div className="bg-white rounded-xl p-8 shadow-lg mb-8">
               {/* Description 1 */}
               {post.description1 && (
-                <p className="text-xl text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
+                <p className="text-base text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
                   {post.description1}
                 </p>
               )}
 
               {/* Image 2 */}
               {post.image2 && (
-                <div className="relative h-[400px] rounded-lg overflow-hidden my-8">
+                <div className="relative h-120 rounded-lg overflow-hidden my-8">
                   <Image
                     src={post.image2}
                     alt="Image 2"
@@ -161,14 +161,14 @@ export default function BlogPostPage() {
 
               {/* Description 2 */}
               {post.description2 && (
-                <p className="text-xl text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
+                <p className="text-base text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
                   {post.description2}
                 </p>
               )}
 
               {/* Image 3 */}
               {post.image3 && (
-                <div className="relative h-[400px] rounded-lg overflow-hidden my-8">
+                <div className="relative h-120 rounded-lg overflow-hidden my-8">
                   <Image
                     src={post.image3}
                     alt="Image 3"
@@ -180,14 +180,14 @@ export default function BlogPostPage() {
 
               {/* Description 3 */}
               {post.description3 && (
-                <p className="text-xl text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
+                <p className="text-base text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
                   {post.description3}
                 </p>
               )}
 
               {/* Image 4 */}
               {post.image4 && (
-                <div className="relative h-[400px] rounded-lg overflow-hidden my-8">
+                <div className="relative h-120 rounded-lg overflow-hidden my-8">
                   <Image
                     src={post.image4}
                     alt="Image 4"
@@ -198,7 +198,7 @@ export default function BlogPostPage() {
               )}
               {/* Description 4 */}
               {post.description4 && (
-                <p className="text-xl text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
+                <p className="text-base text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
                   {post.description4}
                 </p>
               )}
