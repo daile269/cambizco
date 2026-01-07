@@ -270,8 +270,7 @@ export default function Home() {
                   <p className="flex items-start">
                     <span className="text-blue-600 mr-2">+</span>
                     <span>
-                      "Bạn tay" kết nối nhà bán hàng Việt và người mua hàng
-                      Campuchia
+                      "Cánh tay" kết nối nhà bán hàng Việt tại Campuchia
                     </span>
                   </p>
                   <p className="flex items-start">
@@ -1449,7 +1448,7 @@ export default function Home() {
               {/* Success Screen 1 */}
               <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src="/h1.png"
+                  src="/h111.jpg"
                   alt="Success Screen 1"
                   fill
                   className="object-cover"
@@ -1459,7 +1458,7 @@ export default function Home() {
               {/* Success Screen 2 */}
               <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src="/h2.png"
+                  src="/camb.jpg"
                   alt="Success Screen 2"
                   fill
                   className="object-cover"
@@ -1469,7 +1468,7 @@ export default function Home() {
               {/* Success Screen 3 */}
               <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src="/h3.png"
+                  src="/founderso.jpg"
                   alt="Success Screen 3"
                   fill
                   className="object-cover"
@@ -1477,7 +1476,7 @@ export default function Home() {
               </div>
               <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src="/h4.png"
+                  src="/don.jpg"
                   alt="Success Screen 4"
                   fill
                   className="object-cover"
@@ -1485,7 +1484,7 @@ export default function Home() {
               </div>
               <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src="/h5.png"
+                  src="/dg.jpg"
                   alt="Success Screen 4"
                   fill
                   className="object-cover"
@@ -1493,7 +1492,7 @@ export default function Home() {
               </div>
               <div className="relative h-64 rounded-lg overflow-hidden shadow-lg">
                 <Image
-                  src="/h6.png"
+                  src="/k1.jpg"
                   alt="Success Screen 6"
                   fill
                   className="object-cover"
