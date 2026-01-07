@@ -49,15 +49,40 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setShowThankYou(true);
-    setFormData({ name: "", phone: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Auto hide thank you page after 5 seconds
-    setTimeout(() => {
-      setShowThankYou(false);
-    }, 5000);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/consultations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setShowThankYou(true);
+        setFormData({ name: "", phone: "", email: "", message: "" });
+
+        // Auto hide thank you page after 5 seconds
+        setTimeout(() => {
+          setShowThankYou(false);
+        }, 5000);
+      } else {
+        alert(data.error || "Có lỗi xảy ra. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Get category color
@@ -1667,9 +1692,10 @@ export default function Home() {
 
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-lg"
+                  disabled={isSubmitting}
+                  className="w-full px-8 py-4 bg-white text-blue-600 font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  Đăng ký miễn phí
+                  {isSubmitting ? "Đang gửi..." : "Đăng ký miễn phí"}
                 </button>
               </form>
             </div>

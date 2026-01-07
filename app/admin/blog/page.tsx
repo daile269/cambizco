@@ -121,6 +121,12 @@ export default function AdminBlogPage() {
           </h1>
           <div className="flex gap-3">
             <button
+              onClick={() => router.push("/admin")}
+              className="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md"
+            >
+              ← Dashboard
+            </button>
+            <button
               onClick={() => router.push("/admin/blog/new")}
               className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-md"
             >
