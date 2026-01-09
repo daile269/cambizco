@@ -15,9 +15,15 @@ async function sendTelegramNotification(consultation: {
 
   // Skip if Telegram is not configured
   if (!botToken || !chatId) {
-    console.warn('Telegram bot token or chat ID not configured');
+    console.warn('⚠️ Telegram not configured:', {
+      hasBotToken: !!botToken,
+      hasChatId: !!chatId,
+      env: process.env.NODE_ENV
+    });
     return;
   }
+
+  console.log('📤 Sending Telegram notification...');
 
   try {
     const date = new Date(consultation.createdAt).toLocaleString('vi-VN', {
@@ -57,10 +63,12 @@ async function sendTelegramNotification(consultation: {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Telegram API error:', errorData);
+      console.error('❌ Telegram API error:', errorData);
+    } else {
+      console.log('✅ Telegram notification sent successfully');
     }
   } catch (error) {
-    console.error('Error sending Telegram notification:', error);
+    console.error('❌ Error sending Telegram notification:', error);
     // Don't throw error - we don't want to fail the request if Telegram fails
   }
 }
