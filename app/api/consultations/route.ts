@@ -2,6 +2,69 @@ import { NextRequest, NextResponse } from 'next/server';
 import { database } from '@/lib/firebase';
 import { ref, push, set } from 'firebase/database';
 
+// Function to send Telegram notification
+async function sendTelegramNotification(consultation: {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  createdAt: number;
+}) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  // Skip if Telegram is not configured
+  if (!botToken || !chatId) {
+    console.warn('Telegram bot token or chat ID not configured');
+    return;
+  }
+
+  try {
+    const date = new Date(consultation.createdAt).toLocaleString('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    const telegramMessage = `
+🔔 <b>YÊU CẦU TƯ VẤN MỚI</b>
+
+👤 <b>Tên:</b> ${consultation.name}
+📧 <b>Email:</b> ${consultation.email}
+📱 <b>Số điện thoại:</b> ${consultation.phone}
+💬 <b>Nội dung:</b> ${consultation.message || 'Không có'}
+
+🕐 <b>Thời gian:</b> ${date}
+    `.trim();
+
+    const response = await fetch(
+      `https://api.telegram.org/bot${botToken}/sendMessage`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: telegramMessage,
+          parse_mode: 'HTML',
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Telegram API error:', errorData);
+    }
+  } catch (error) {
+    console.error('Error sending Telegram notification:', error);
+    // Don't throw error - we don't want to fail the request if Telegram fails
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -29,6 +92,11 @@ export async function POST(request: NextRequest) {
     const consultationsRef = ref(database, 'consultations');
     const newConsultationRef = push(consultationsRef);
     await set(newConsultationRef, consultation);
+
+    // Send Telegram notification (non-blocking)
+    sendTelegramNotification(consultation).catch((error) => {
+      console.error('Failed to send Telegram notification:', error);
+    });
 
     return NextResponse.json(
       { 
