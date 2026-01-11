@@ -310,11 +310,15 @@ export default function FulfillmentPost() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="bg-white/10 rounded-lg p-4">
                     <p className="text-sm opacity-90 mb-1">Hotline:</p>
-                    <p className="text-2xl font-bold">☎️ 0966 337 503</p>
+                    <p className="text-2xl font-bold">
+                      ☎️ 0979897979/ 090360360
+                    </p>
                   </div>
                   <div className="bg-white/10 rounded-lg p-4">
                     <p className="text-sm opacity-90 mb-1">Telegram:</p>
-                    <p className="text-2xl font-bold">💬 0966337503</p>
+                    <p className="text-2xl font-bold">
+                      💬 https://t.me/cambizcustomer
+                    </p>
                   </div>
                 </div>
                 <div className="mt-6 text-center">

@@ -20,7 +20,7 @@ export default function Footer() {
                 Tnot Chrum Village, Boeung Tumpun, Phnom Penh, Cambodia
               </p>
               <p className="text-gray-300">
-                <span className="font-semibold">Hotline:</span>{" "}
+                <span className="font-semibold">0979897979/090360360:</span>{" "}
                 <a
                   href="tel:0931431593"
                   className="hover:text-blue-400 transition-colors"
