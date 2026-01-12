@@ -23,7 +23,9 @@ export default function EditBlogPostPage() {
     image2: "",
     image3: "",
     image4: "",
+    slug: "",
   });
+  const [isSlugManual, setIsSlugManual] = useState(true); // Default to true for edit
   const [featured, setFeatured] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +49,7 @@ export default function EditBlogPostPage() {
           image2: data.image2 || "",
           image3: data.image3 || "",
           image4: data.image4 || "",
+          slug: data.slug || "",
         });
         setFeatured(data.featured || false);
         setIsLoading(false);
@@ -78,7 +81,6 @@ export default function EditBlogPostPage() {
     try {
       const postData = {
         ...formData,
-        slug: createSlug(formData.title),
         featured: featured,
         updatedAt: serverTimestamp(),
       };
@@ -158,18 +160,40 @@ export default function EditBlogPostPage() {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
+                onChange={(e) => {
+                  const newTitle = e.target.value;
+                  setFormData((prev) => ({
+                    ...prev,
+                    title: newTitle,
+                    slug: isSlugManual ? prev.slug : createSlug(newTitle),
+                  }));
+                }}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 placeholder="Nhập tiêu đề bài viết"
               />
-              {formData.title && (
-                <p className="text-xs text-gray-500 mt-1">
-                  Slug: {createSlug(formData.title)}
-                </p>
-              )}
+            </div>
+
+            {/* Slug */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Slug (Đường dẫn thân thiện){" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.slug}
+                onChange={(e) => {
+                  setIsSlugManual(true);
+                  setFormData({ ...formData, slug: e.target.value });
+                }}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                required
+                placeholder="slug-bai-viet"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Lưu ý: Thay đổi slug có thể làm hỏng các liên kết cũ đã chia sẻ.
+              </p>
             </div>
 
             {/* Description 1 */}

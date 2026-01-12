@@ -30,4 +30,5 @@ export interface BlogPostInput {
   image2: string;
   image3: string;
   image4: string;
+  slug: string;
 }
