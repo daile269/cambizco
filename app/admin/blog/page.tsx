@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { database } from "@/lib/firebase";
-import { ref, remove, onValue } from "firebase/database";
+import { ref, remove, onValue, update } from "firebase/database";
 import { BlogPost } from "@/types/blog";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -37,6 +37,16 @@ export default function AdminBlogPage() {
           return timeB - timeA;
         });
         setPosts(postsArray);
+
+        // Auto-set published = true for records that don't have the field
+        postsArray.forEach((p) => {
+          if (p.published === undefined) {
+            const postRef = ref(database, `blogPosts/${p.id}`);
+            update(postRef, { published: true }).catch((err) =>
+              console.error("Error setting default published:", err)
+            );
+          }
+        });
       } else {
         setPosts([]);
       }
@@ -61,6 +71,18 @@ export default function AdminBlogPage() {
         console.error("Error:", error);
         alert("Có lỗi xảy ra!");
       }
+    }
+  };
+
+  // Toggle published (show/hide) for a post
+  const togglePublished = async (id: string, current: boolean | undefined) => {
+    try {
+      const postRef = ref(database, `blogPosts/${id}`);
+      await update(postRef, { published: !current });
+      alert(`Cập nhật trạng thái hiển thị thành ${!current ? 'Hiện' : 'Ẩn'}`);
+    } catch (error) {
+      console.error("Error toggling published:", error);
+      alert("Cập nhật trạng thái thất bại");
     }
   };
 
@@ -308,6 +330,16 @@ export default function AdminBlogPage() {
                           className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors"
                         >
                           Xóa
+                        </button>
+                        <button
+                          onClick={() => togglePublished(post.id, post.published)}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                            post.published === false
+                              ? 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+                              : 'bg-green-600 text-white hover:bg-green-700'
+                          }`}
+                        >
+                          {post.published === false ? 'Ẩn' : 'Hiện'}
                         </button>
                       </div>
                     </div>

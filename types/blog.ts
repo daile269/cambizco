@@ -14,6 +14,7 @@ export interface BlogPost {
   updatedAt: number;
   slug: string;
   featured?: boolean; // Đánh dấu bài viết nổi bật
+  published?: boolean; // true = hiện, false = ẩn
   // Optional fields for display
   excerpt?: string;
   date?: string;
@@ -31,4 +32,5 @@ export interface BlogPostInput {
   image3: string;
   image4: string;
   slug: string;
+  published?: boolean;
 }

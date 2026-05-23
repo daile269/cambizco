@@ -39,7 +39,7 @@ export default function Home() {
             id: key,
             ...data[key],
           }))
-          .filter((post) => post.featured === true) // Chỉ lấy bài viết nổi bật
+          .filter((post) => post.featured === true && post.published !== false) // Chỉ lấy bài viết nổi bật và đã được publish
           .sort((a, b) => b.createdAt - a.createdAt) // Sort by newest first
           .slice(0, 3); // Lấy tối đa 3 bài
         setFeaturedPosts(posts);
@@ -621,8 +621,7 @@ export default function Home() {
               <div className="flex flex-col items-center relative z-10">
                 <div className="text-center mb-4 max-w-[180px]">
                   <p className="text-sm text-gray-700 leading-tight">
-                    Chuyển hàng của nhà bán từ Việt Nam tới kho của CamBiz tại
-                    trường sứ tại
+                    Nhà bán gửi hàng từ Việt Nam đến kho CamBiz tại Campuchia
                   </p>
                 </div>
                 <div className="relative">
@@ -814,7 +813,7 @@ export default function Home() {
               {
                 num: "1",
                 title:
-                  "Chuyển hàng của nhà bán từ Việt Nam tới kho của CamBiz tại trường sứ tại",
+                  "Nhà bán gửi hàng từ Việt Nam đến kho CamBiz tại Campuchia ",
                 subtitle: "Nhà bán chạy quảng cáo để được data của người mua",
                 image:
                   "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=400&h=400&fit=crop",
@@ -1442,7 +1441,7 @@ export default function Home() {
                 <div className="mt-4 grid grid-cols-3 gap-2">
                   <div className="relative h-20 rounded overflow-hidden">
                     <Image
-                      src="/h1.png"
+                      src="/k1.jpg"
                       alt="Service 1"
                       fill
                       className="object-cover"
@@ -1450,7 +1449,7 @@ export default function Home() {
                   </div>
                   <div className="relative h-20 rounded overflow-hidden">
                     <Image
-                      src="/h2.png"
+                      src="/k2.jpg"
                       alt="Service 2"
                       fill
                       className="object-cover"
@@ -1458,7 +1457,7 @@ export default function Home() {
                   </div>
                   <div className="relative h-20 rounded overflow-hidden">
                     <Image
-                      src="/h3.png"
+                      src="/k3.png"
                       alt="Service 3"
                       fill
                       className="object-cover"

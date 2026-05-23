@@ -29,7 +29,9 @@ export default function BlogPage() {
             ...data[key],
           }))
           .reverse() as BlogPost[]; // Reverse to show newest first
-        setBlogPosts(postsArray);
+        // Only show published posts (published !== false)
+        const visiblePosts = postsArray.filter((p) => p.published !== false) as BlogPost[];
+        setBlogPosts(visiblePosts);
       } else {
         setBlogPosts([]);
       }

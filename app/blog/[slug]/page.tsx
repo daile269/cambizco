@@ -30,7 +30,12 @@ export default function BlogPostPage() {
           id: postKey,
           ...data[postKey],
         } as BlogPost;
-        setPost(postData);
+        // If the post is explicitly unpublished, treat as not found
+        if (postData.published === false) {
+          setPost(null);
+        } else {
+          setPost(postData);
+        }
       } else {
         setPost(null);
       }
