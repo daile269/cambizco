@@ -11,6 +11,7 @@ export default function EditBlogPostPage() {
   const router = useRouter();
   const params = useParams();
   const postId = params.id as string;
+  const imageFields = ["image1", "image2", "image3", "image4"] as const;
 
   const [formData, setFormData] = useState<BlogPostInput>({
     category: "",
@@ -101,7 +102,10 @@ export default function EditBlogPostPage() {
   };
 
   // Handle image upload
-  const handleImageUpload = (result: any, imageField: string) => {
+  const handleImageUpload = (
+    result: any,
+    imageField: (typeof imageFields)[number]
+  ) => {
     setFormData((prevData) => ({
       ...prevData,
       [imageField]: result.info.secure_url,
@@ -309,8 +313,12 @@ export default function EditBlogPostPage() {
             <div className="border-t pt-6">
               <h3 className="text-lg font-semibold mb-4">Hình Ảnh</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[1, 2, 3, 4].map((num) => (
-                  <div key={num}>
+                {imageFields.map((imageField, index) => {
+                  const num = index + 1;
+                  const imageValue = formData[imageField];
+
+                  return (
+                  <div key={imageField}>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Ảnh {num}
                     </label>
@@ -319,7 +327,7 @@ export default function EditBlogPostPage() {
                         process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
                       }
                       onSuccess={(result) =>
-                        handleImageUpload(result, `image${num}`)
+                        handleImageUpload(result, imageField)
                       }
                     >
                       {({ open }) => (
@@ -329,16 +337,12 @@ export default function EditBlogPostPage() {
                             onClick={() => open()}
                             className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                           >
-                            {formData[`image${num}` as keyof BlogPostInput]
-                              ? `Thay đổi ảnh ${num}`
-                              : `Upload ảnh ${num}`}
+                            {imageValue ? `Thay đổi ảnh ${num}` : `Upload ảnh ${num}`}
                           </button>
-                          {formData[`image${num}` as keyof BlogPostInput] && (
+                          {imageValue && (
                             <div className="mt-2 relative">
                               <img
-                                src={
-                                  formData[`image${num}` as keyof BlogPostInput]
-                                }
+                                src={imageValue}
                                 alt={`Preview ${num}`}
                                 className="w-full h-48 object-cover rounded-lg"
                               />
@@ -347,7 +351,7 @@ export default function EditBlogPostPage() {
                                 onClick={() =>
                                   setFormData({
                                     ...formData,
-                                    [`image${num}`]: "",
+                                    [imageField]: "",
                                   })
                                 }
                                 className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700"
@@ -360,7 +364,8 @@ export default function EditBlogPostPage() {
                       )}
                     </CldUploadWidget>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
